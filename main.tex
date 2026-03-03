@@ -37,26 +37,7 @@
         thick
     }
 }
-\pgfplotsset{
-    every axis/.append style={
-        view={120}{30} % угол обзора по умолчанию
-    }
-}
 
-\pgfplotsset{
-    3dstyle/.style={
-        axis lines=middle,
-        grid=both,
-        view={120}{30},
-        width=10cm,
-        height=8cm,
-        samples=40,
-        samples y=40,
-        colormap/viridis,
-        colorbar,
-        shader=interp
-    }
-}
 \usepgfplotslibrary{statistics}
 \usepgfplotslibrary{groupplots}
 % =============================
@@ -81,6 +62,116 @@
 \newcommand{\p}[2]{\frac{\partial #1}{\partial #2}}
 \newcommand{\Lim}[2]{\lim\limits_{#1 \rightarrow #2}}
 \newcommand{\Sum}[2]{\sum\limits_{#1}^{#2}}
+
+% =============================
+%      ЛИНЕЙНАЯ АЛГЕБРА — PACK
+% =============================
+
+% (Если mathtools ещё не подключён — можно добавить, он расширяет amsmath)
+% \usepackage{mathtools}
+% \usepackage{bm} % жирные векторы (опционально)
+
+% -------- Матрицы / векторы / определители --------
+\newcommand{\mat}[1]{\begin{pmatrix}#1\end{pmatrix}}     % ( )
+\newcommand{\bmat}[1]{\begin{bmatrix}#1\end{bmatrix}}     % [ ]
+\newcommand{\detmat}[1]{\begin{vmatrix}#1\end{vmatrix}}   % | |
+\newcommand{\vect}[1]{\begin{pmatrix}#1\end{pmatrix}}     % вектор-столбец ( )
+\newcommand{\bvect}[1]{\begin{bmatrix}#1\end{bmatrix}}    % вектор-столбец [ ]
+
+% Удобные скобки
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\scalar}[2]{\left\langle #1, #2 \right\rangle}
+
+% Транспонирование, обратная
+\newcommand{\T}{^{\mathsf T}}
+\newcommand{\inv}{^{-1}}
+
+% -------- Операторы линала --------
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\Ker}{Ker}
+\DeclareMathOperator{\Img}{Im}     % чтобы не конфликтовать с \Im
+\DeclareMathOperator{\rank}{rank}  % если хотите, вместо \rk
+\DeclareMathOperator{\Null}{Null}
+\DeclareMathOperator{\Col}{Col}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\id}{id}
+
+% Часто используемые множества уже есть: \R \C \Q \Z \N \F
+
+% -------- Красивая запись систем --------
+% Использование: \system{ x+y=1 \\ 2x-y=0 }
+\newcommand{\system}[1]{%
+\left\{
+\begin{aligned}
+#1
+\end{aligned}
+\right.}
+
+% Пример:
+% \[
+% \system{
+% x + y &= 1 \\
+% 2x - y &= 0
+% }
+% \]
+
+% -------- Расширенная матрица (A | b) --------
+% Использование: \aug{1 & 2 \\ 3 & 4}{5 \\ 6}
+% Расширенная матрица через |
+% Использование: \augmat{ A }{ b }
+% где A — левая часть, b — правая колонка
+\newcommand{\augmat}[2]{%
+\left[
+\begin{array}{c|c}
+#1 & #2
+\end{array}
+\right]
+}
+% Важно: команда \aug рассчитана на 2 столбца в A (cc|c).
+% Ниже есть универсальный вариант \Aug.
+
+% Универсальная расширенная матрица:
+% \Aug{<cols of A>}{<A entries>}{<cols of b>}{<b entries>}
+% Пример: \Aug{ccc}{1&0&2\\0&1&-1}{c}{3\\4}
+\newcommand{\Aug}[4]{%
+\left[\begin{array}{#1|#3}
+#2 & #4
+\end{array}\right]
+}
+
+% -------- Приведение к ступенчатому виду (стрелки) --------
+\newcommand{\toREF}{\xrightarrow{\ \mathrm{REF}\ }}
+\newcommand{\toRREF}{\xrightarrow{\ \mathrm{RREF}\ }}
+\newcommand{\toEchelon}{\xrightarrow{\ \text{ступ. вид}\ }}
+
+% Пример:
+% \[
+% \Aug{ccc}{1&2&-1\\2&4&-2}{c}{3\\6}
+% \toREF
+% \Aug{ccc}{1&2&-1\\0&0&0}{c}{3\\0}
+% \]
+
+% -------- Операции со строками (подпись над стрелкой) --------
+% Использование: \rowop{R_2 \leftarrow R_2 - 2R_1}
+\newcommand{\rowop}[1]{\xrightarrow{\ #1\ }}
+
+% Пример:
+% \[
+% \Aug{cc}{1&2\\3&4}{c}{5\\6}
+% \rowop{R_2 \leftarrow R_2 - 3R_1}
+% \Aug{cc}{1&2\\0&-2}{c}{5\\-9}
+% \]
+
+% -------- Векторы/базисы/проекции (часто в линале) --------
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\lin}[1]{\left[#1\right]} % линейная оболочка/отрезок (по вкусу)
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\orth}{orth}
+
+% Примеры:
+% $\Span\set{v_1,v_2}$, $\proj_U v$, $U^\orth$
 
 % =============================
 %   Авто-нумерация задач + ссылки
@@ -108,29 +199,12 @@
 % =============================
 %             Заголовок
 % =============================
-\title{Линейная алгебра\\ \large Домашнее задание 5}
-\author{Горилла Сильвербек}
-\affil{БПМИ225}
-\date{Решены все номера}
-
+\title{Название Предмета\\ \large Домашнее задание №}
+\author{Манько Максим}
+\affil{ЦУ}
+\date{3 Марта 2026}
 \begin{document}
 \maketitle
 
 \task
-\begin{solution}
-Пример: 
-\[
-\Sum{i=1}{n} i = \frac{n(n+1)}{2}.
-\]
-\end{solution}
-\begin{answer}
-$\frac{n(n+1)}{2}$
-\end{answer}
-
-\task[Ссылка на задачу]
-\label{t:second}
-\begin{solution}
-Ссылаемся на задачу \ref{t:second}.
-\end{solution}
-
 \end{document}
