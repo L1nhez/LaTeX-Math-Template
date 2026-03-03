@@ -31,8 +31,8 @@
             font=\small,
             draw=none
         },
-        width=10cm,
-        height=6cm,
+        width=15cm,
+        height=10cm,
         samples=200,
         thick
     }
@@ -122,13 +122,13 @@
 % Расширенная матрица через |
 % Использование: \augmat{ A }{ b }
 % где A — левая часть, b — правая колонка
-\newcommand{\augmat}[2]{%
-\left[
-\begin{array}{c|c}
-#1 & #2
-\end{array}
-\right]
-}
+    \newcommand{\aug}[2]{%
+    \left[
+    \begin{array}{#1|c}
+    $\displaystyle #2$
+    \end{array}
+    \right]
+    }
 % Важно: команда \aug рассчитана на 2 столбца в A (cc|c).
 % Ниже есть универсальный вариант \Aug.
 
@@ -207,4 +207,6 @@
 \maketitle
 
 \task
+
 \end{document}
+
