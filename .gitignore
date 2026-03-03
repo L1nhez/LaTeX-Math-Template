@@ -1,0 +1,22 @@
+# LaTeX build files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.nav
+*.snm
+
+# PDF (обычно не коммитят; если хотите хранить pdf — удалите эту строку)
+*.pdf
+
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+.vscode/
